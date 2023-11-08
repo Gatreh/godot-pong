@@ -1,0 +1,148 @@
+[gd_scene load_steps=14 format=3 uid="uid://82eu7o5voygl"]
+
+[ext_resource type="Script" path="res://Game.gd" id="1_v7aps"]
+[ext_resource type="Script" path="res://PlayerPaddle.gd" id="1_yqnu2"]
+[ext_resource type="Texture2D" uid="uid://brbe7sm8kbnm" path="res://icon.svg" id="2_208it"]
+[ext_resource type="Script" path="res://AIPaddle.gd" id="2_ywlnd"]
+[ext_resource type="Script" path="res://Ball.gd" id="3_u76xd"]
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_gjxfm"]
+friction = 0.0
+bounce = 1.0
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_rhq31"]
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_r10up"]
+friction = 0.0
+bounce = 1.0
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_oa3ml"]
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_e677y"]
+friction = 0.0
+bounce = 1.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_xsxud"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_eqk3p"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_x2m0w"]
+
+[node name="Main" type="Node2D"]
+script = ExtResource("1_v7aps")
+
+[node name="PlayerPaddle" type="RigidBody2D" parent="."]
+position = Vector2(50, 200)
+mass = 500.0
+physics_material_override = SubResource("PhysicsMaterial_gjxfm")
+gravity_scale = 0.0
+lock_rotation = true
+freeze_mode = 1
+script = ExtResource("1_yqnu2")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="PlayerPaddle"]
+position = Vector2(15, 125)
+scale = Vector2(1.5, 12.5)
+shape = SubResource("RectangleShape2D_rhq31")
+
+[node name="ColorRect" type="ColorRect" parent="PlayerPaddle"]
+offset_right = 30.0
+offset_bottom = 250.0
+color = Color(0.545098, 0.545098, 0.545098, 1)
+
+[node name="AIPaddle" type="RigidBody2D" parent="."]
+position = Vector2(1075, 200)
+mass = 500.0
+physics_material_override = SubResource("PhysicsMaterial_r10up")
+gravity_scale = 0.0
+lock_rotation = true
+freeze_mode = 1
+script = ExtResource("2_ywlnd")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="AIPaddle"]
+position = Vector2(15, 125)
+scale = Vector2(1.5, 12.5)
+shape = SubResource("RectangleShape2D_oa3ml")
+
+[node name="ColorRect" type="ColorRect" parent="AIPaddle"]
+offset_right = 30.0
+offset_bottom = 250.0
+color = Color(0.14902, 0.14902, 0.14902, 1)
+
+[node name="Ball" type="RigidBody2D" parent="."]
+position = Vector2(575, 325)
+mass = 0.01
+physics_material_override = SubResource("PhysicsMaterial_e677y")
+gravity_scale = 0.0
+lock_rotation = true
+linear_damp_mode = 1
+angular_damp_mode = 1
+script = ExtResource("3_u76xd")
+
+[node name="Sprite2D" type="Sprite2D" parent="Ball"]
+scale = Vector2(0.4375, 0.421875)
+texture = ExtResource("2_208it")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Ball"]
+scale = Vector2(2, 2)
+shape = SubResource("CircleShape2D_xsxud")
+
+[node name="PlayerScoreLabel" type="Label" parent="."]
+offset_left = 50.0
+offset_top = 30.0
+offset_right = 91.0
+offset_bottom = 53.0
+
+[node name="AIScoreLabel" type="Label" parent="."]
+offset_left = 991.0
+offset_top = 34.0
+offset_right = 1027.0
+offset_bottom = 57.0
+
+[node name="Wall_Left" type="StaticBody2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Wall_Left"]
+position = Vector2(-10, 325)
+scale = Vector2(1, 32.5)
+shape = SubResource("RectangleShape2D_eqk3p")
+
+[node name="Wall_Right" type="StaticBody2D" parent="."]
+position = Vector2(1150, 0)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Wall_Right"]
+position = Vector2(10, 325)
+scale = Vector2(1, 32.5)
+shape = SubResource("RectangleShape2D_eqk3p")
+
+[node name="Wall_3" type="StaticBody2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Wall_3"]
+position = Vector2(575, -10)
+scale = Vector2(57.5, 1)
+shape = SubResource("RectangleShape2D_eqk3p")
+
+[node name="Wall_4" type="StaticBody2D" parent="."]
+position = Vector2(0, 650)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Wall_4"]
+position = Vector2(575, 10)
+scale = Vector2(57.5, 1)
+shape = SubResource("RectangleShape2D_eqk3p")
+
+[node name="LeftGoal" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="LeftGoal"]
+position = Vector2(20, 325)
+scale = Vector2(1.9, 32)
+shape = SubResource("RectangleShape2D_x2m0w")
+
+[node name="RightGoal" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RightGoal"]
+position = Vector2(1130, 325)
+scale = Vector2(1.9, 32)
+shape = SubResource("RectangleShape2D_x2m0w")
+
+[connection signal="body_entered" from="PlayerPaddle" to="." method="_on_player_paddle_body_entered"]
+[connection signal="body_entered" from="LeftGoal" to="." method="_on_left_goal_body_entered"]
+[connection signal="body_entered" from="RightGoal" to="." method="_on_right_goal_body_entered"]
